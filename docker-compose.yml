@@ -1,0 +1,30 @@
+version: '3'
+services:
+  frontend:
+    image: "storage_cloud_frontend:latest"
+    build:
+      context: ./netology-diplom-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+
+  backend:
+    image: "storage_cloud_backend:latest"
+    build:
+      context: ./CloudStorage
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cloud_storage
+
+  db:
+    restart: on-failure
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: cloud_storage
+    ports:
+      - "3306:3306"
