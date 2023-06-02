@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import ru.netology.cloudstorage.dto.authentication.AuthRequest;
 import ru.netology.cloudstorage.dto.authentication.AuthResponse;
 import ru.netology.cloudstorage.jwt.JwtService;
@@ -21,6 +23,8 @@ import static org.mockito.Mockito.*;
 
 public class AuthenticationControllerTest {
     @InjectMocks
+    private AuthenticationController authenticationController;
+    @Mock
     private AuthenticationService authenticationService;
     @Mock
     private UserService userService;
@@ -43,11 +47,18 @@ public class AuthenticationControllerTest {
         User user = buildUser();
         when(userService.loadUserByUsername(TEST_USERNAME)).thenReturn(user);
         when(jwtService.generateToken(user)).thenReturn(TEST_JWT_TOKEN);
+        when(authenticationService.login(authRequest)).thenReturn(new AuthResponse(TEST_JWT_TOKEN));
+        AuthResponse responseResult = authenticationController.login(authRequest);
 
-        AuthResponse responseResult = authenticationService.login(authRequest);
-        Assertions.assertNotNull(responseResult);
         Assertions.assertEquals("TEST_TOKEN", responseResult.getToken());
 
+    }
+    @Test
+    void logoutTest() {
+        ResponseEntity<?> response = authenticationController.logout(TEST_JWT_TOKEN);
+
+        verify(authenticationService, times(1)).logout(TEST_JWT_TOKEN);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     private AuthRequest buildAuthRequest(){
