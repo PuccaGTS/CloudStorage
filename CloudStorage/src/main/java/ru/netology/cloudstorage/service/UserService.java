@@ -1,6 +1,7 @@
 package ru.netology.cloudstorage.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import ru.netology.cloudstorage.exception.BadRequestException;
@@ -16,7 +17,7 @@ public class UserService implements UserDetailsService {
     @Override
     public User loadUserByUsername(String username) {
         return userRepository.findByEmail(username)
-                .orElseThrow(()->new BadRequestException("Bad credential for " + username +
+                .orElseThrow(()-> new BadRequestException("Bad credential for " + username +
                         ".Error input data"));
     }
 }
