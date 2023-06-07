@@ -28,9 +28,11 @@
 1. Необходимо клонировать репозиторий
 
 ``git clone git@github.com:PuccaGTS/CloudStorage.git``
+
 2. Перейти в директорию ``/CloudStorage`` и выполнить сборку проекта:
 
 ``mvn clean install``
+
 3. Вернуться обратно в коневую директорию и выполнить запуск приложения:
 
 ``docker-compose up``
